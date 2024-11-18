@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CustomerDelete {
-   private int custId;
+    private int custId;
 }

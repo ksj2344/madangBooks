@@ -17,11 +17,11 @@ public class CustomerService {
         p.setStartIdx((p.getPage()-1)*p.getSize());
         return mapper.selCustomerlist(p);
     }
-//    public int updCustomer(CustomerPutReq p){
-//        return mapper.updCustomer(p);
-//    }
-//    public int delCustomer(CustomerDelete p){
-//        return mapper.delCustomer(p);
-//    }
+    public int putCustomer(CustomerPutReq p){
+        return mapper.updCustomer(p);
+    }
+    public int delCustomer(CustomerDelete p){
+        return mapper.delCustomer(p);
+    }
 
 }
