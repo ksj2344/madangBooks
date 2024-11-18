@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.madang.manager.book.BookMapper">
+
+    <insert id="insBook">
+        INSERT INTO book
+        SET bookname=#{bookName}
+            , publisher=#{publisher}
+            , price=#{price}
+    </insert>
+
+    <select id="selBooklist">
+        SELECT bookid AS bookId
+        , bookname AS bookName
+        , publisher
+        ,price
+        FROM book
+        <if test=" searchText != null and searchText != '' ">
+            WHERE bookname LIKE '%${searchText}%'
+        </if>
+        ORDER BY bookname, bookid
+        LIMIT #{startIdx}, #{size}
+    </select>
+    <!-- LIMIT ${(page - 1) * size} , #{size} 여기서 할 수도 있음
+        그러나 로직처리는 service단에서 해야함. -->
+    <!-- #{멤버필드} 홑따옴표 붙임
+        ${멤버필드} 홑따옴표를 붙이지 않음. 그대로 쓴다.
+            테이블명 바꿀 때 ${멤버필드} 씀 -->
+
+    <update id="updBook">
+        UPDATE book
+        <set>
+            <if test=" bookName != null and bookName != '' ">
+                bookname= #{bookName}
+            </if>
+            <if test=" publisher != null and publisher != '' ">
+                , publisher = #{publisher}
+            </if>
+            <if test=" price != null and price>-1 ">
+                , price= #{price}
+            </if>
+        </set>
+        WHERE bookid = #{bookId}
+    </update>
+
+    <delete id="delBook">
+        DELETE FROM book
+        WHERE bookid= #{bookId}
+    </delete>
+</mapper>
