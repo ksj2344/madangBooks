@@ -28,25 +28,24 @@ public class CustomerController {
     @Operation(summary = "고객 열람")
     //@ParameterObject - Swagger용 에노테이션. RequestParam으로 설정했을 때 나오는 FORM처럼 된다.
     public MyResponse<List<CustomerGetRes>> getCustomerlist(@ParameterObject CustomerGetReq p){
+        log.info("get-req: {}",p);
         return new MyResponse<>(p.getPage()+"페이지 데이터",service.getCustomerList(p));
     }
 
+    //@ModelAttribute는 null값을 제한할 수 있는게 없지만 @RequestParam은 required = true를 통해 제한 할 수 있음(에러날 수 있음)
+
     //RequestParam을 이용한 GetMapping
     @GetMapping("/param")
-    @Operation(summary = "파라미터 고객열람")
+    @Operation(summary = "고객열람2")  //String이나 int 같은 타입의 변수 앞에만 @RequestParam 붙일 수 도있다
     public MyResponse<List<CustomerGetRes>> getCustomerlist2(@RequestParam int page
                                                             , @RequestParam int size
                                                             , @RequestParam(name="search_type", required = false) String searchType
                                                             , @RequestParam(name="search_text", required = false) String searchText)
     {
-        CustomerGetReq p = new CustomerGetReq();
-        p.setPage(page);
-        p.setSize(size);
-        p.setSearchType(searchType);
-        p.setSearchText(searchText);
-
-        log.info("get-req: {}",p);
-        return new MyResponse<>(p.getPage()+"페이지 데이터",service.getCustomerList(p));
+        CustomerGetReq p = new CustomerGetReq(page, size, searchType, searchText);
+        log.info("get-req: {}", p);
+        List<CustomerGetRes> res = service.getCustomerList(p);
+        return new MyResponse<>(p.getPage() + "페이지 데이터", res);
     }
 
     @PutMapping
@@ -56,6 +55,7 @@ public class CustomerController {
     }
 
     @DeleteMapping
+    @Operation(summary = "고객삭제")
     public MyResponse<Integer> delCustomer(@ParameterObject CustomerDelete p){  //@ModelAttribute 쓸 때는 쿼리스트링으로 받음.
         return new MyResponse<>(p.getCustId()+"번 고객 삭제",service.delCustomer(p));
     }

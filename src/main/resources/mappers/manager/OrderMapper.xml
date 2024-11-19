@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.madang.manager.order.OrderMapper">
+    <select id="selOrderlist">
+        SELECT orderId, C.custId, C.Name, B.bookId, B.bookName, R.salePrice, R.orderDate
+        FROM orders AS R
+        JOIN book AS B
+        ON R.bookid=B.bookid
+        JOIN customer AS C
+        ON R.custid=C.custid
+        ORDER BY R.orderid DESC
+        LIMIT #{startIndex}, #{size}
+    </select>
+</mapper>

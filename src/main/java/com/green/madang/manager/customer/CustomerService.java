@@ -14,7 +14,12 @@ public class CustomerService {
         return mapper.insCustomer(p);
     }
     public List<CustomerGetRes> getCustomerList(CustomerGetReq p){
-        p.setStartIdx((p.getPage()-1)*p.getSize());
+        //page 로직 처리 >> startIdx값 세팅
+        //(page - 1) * size;
+//        int startIdx = (p.getPage() - 1) * p.getSize();
+//        p.setStartIdx(startIdx);
+
+        //CustomerGetReq는 immutable객체로 만들었기 때문에 객체 안에서 startIdx값을 계산하였음.
         return mapper.selCustomerlist(p);
     }
     public int putCustomer(CustomerPutReq p){
